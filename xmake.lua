@@ -66,4 +66,25 @@ includes("efi")
 includes("boot")
 
 includes("xtos")
-    
+
+target("bootimage")
+    set_kind("phony")
+
+    add_deps("boot", "xtos")
+
+    on_build(function (target)
+        local outdir = path.join(target:targetdir(), "img")
+        os.mkdir(outdir)
+        local efidir = path.join(outdir, "/EFI/BOOT")
+        os.mkdir(efidir)
+
+        local boot = target:dep("boot")
+        if not os.exists(path.join(efidir, "BOOTX64.EFI")) then
+            os.ln(boot:targetfile(), path.join(efidir, "BOOTX64.EFI"))
+        end
+        local xtos = target:dep("xtos")
+        if not os.exists(path.join(outdir, "xtos.exe")) then
+            os.ln(xtos:targetfile(), path.join(outdir, "xtos.exe"))
+        end
+    end)
+
