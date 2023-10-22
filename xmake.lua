@@ -1,7 +1,6 @@
 add_rules("mode.debug", "mode.release")
 
 toolchain("xtfsclang")
-
     -- mark as standalone toolchain
     set_kind("standalone")
 
@@ -15,11 +14,7 @@ toolchain("xtfsclang")
     set_toolset("strip", "llvm-strip")
     set_toolset("mm", "clang")
     set_toolset("mxx", "clang", "clang++")
-    if is_arch("x86_64", "x64") then
-        set_toolset("as", "nasm")
-    else
-        set_toolset("as", "clang")
-    end
+    set_toolset("as", "clang")
 
     add_defines("_XT")
 
@@ -64,11 +59,7 @@ toolchain("xtfsclang")
         toolchain:add("mxflags", march)
 
         -- init flags for asm
-        if is_arch("x86_64", "x64") then
-            toolchain:add("asflags", "-fwin")
-        else
-            toolchain:add("asflags", march)
-        end
+        toolchain:add("asflags", march)
     end)
 
 includes("efi")

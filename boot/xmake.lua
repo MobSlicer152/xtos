@@ -2,20 +2,18 @@ target("boot")
     set_kind("binary")
     add_files("*.c")
     add_includedirs("../efi")
-    add_deps("BaseLib")
-    add_deps("BasePeCoffLib")
-    add_deps("UefiLib")
+    add_deps("gnuefi")
 
     if is_arch("x86_64", "x64") then
-        add_includedirs("../efi/X64")
+        add_includedirs("../efi/x86_64")
     elseif is_arch("riscv64") then
-        add_includedirs("../efi/RiscV64")
+        add_includedirs("../efi/riscv64")
     elseif is_arch("loongarch64") then
-        add_includedirs("../efi/LoongArch64")
+        add_includedirs("../efi/loongarch64")
     elseif is_arch("aarch64", "arm64") then
-        add_includedirs("../efi/AArch64")
+        add_includedirs("../efi/aarch64")
     else
-        add_includedirs("../efi/Ia32")
+        add_includedirs("../efi/ia32")
     end
 
     set_extension(".efi")
