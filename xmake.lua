@@ -10,12 +10,16 @@ toolchain("xtfsclang")
     set_toolset("cxx", "clang", "clang++")
     set_toolset("ld", "clang++", "clang")
     set_toolset("sh", "clang++", "clang")
-    set_toolset("ar", "ar")
-    set_toolset("ex", "ar")
-    set_toolset("strip", "strip")
+    set_toolset("ar", "llvm-ar")
+    set_toolset("ex", "llvm-ar")
+    set_toolset("strip", "llvm-strip")
     set_toolset("mm", "clang")
     set_toolset("mxx", "clang", "clang++")
-    set_toolset("as", "clang")
+    if is_arch("x86_64", "x64") then
+        set_toolset("as", "nasm")
+    else
+        set_toolset("as", "clang")
+    end
 
     add_defines("_XT")
 
@@ -60,7 +64,11 @@ toolchain("xtfsclang")
         toolchain:add("mxflags", march)
 
         -- init flags for asm
-        toolchain:add("asflags", march)
+        if is_arch("x86_64", "x64") then
+            toolchain:add("asflags", "-fwin")
+        else
+            toolchain:add("asflags", march)
+        end
     end)
 
 includes("efi")
