@@ -1,3 +1,9 @@
+set_project("xtos")
+set_version("0.0.0")
+
+set_allowedplats("windows")
+set_allowedarchs("x64", "riscv64", "loongarch64", "aarch64")
+
 add_rules("mode.debug", "mode.release")
 
 toolchain("xtfsclang")
@@ -28,7 +34,7 @@ toolchain("xtfsclang")
 
         -- get march
         function get_march()
-            if is_arch("x86_64", "x64") then
+            if is_arch("x64") then
                 return "-target x86_64-unknown-windows"
             elseif is_arch("riscv64") then
                 return "-target riscv64-unknown-windows"
@@ -36,14 +42,15 @@ toolchain("xtfsclang")
                 return "-target loongarch64-unknown-windows"
             elseif is_arch("aarch64", "arm64") then
                 return "-target aarch64-unknown-windows"
-            else
-                return "-target i386-unknown-windows"
             end
+
+            return nil
         end
 
         local march = get_march()
 
         -- init flags for c/c++
+        toolchain:add("cflags", "-std=gnu2x")
         toolchain:add("cxflags", march)
         toolchain:add("cxflags", "-ffreestanding")
         toolchain:add("cxflags", "-fno-stack-protector")
@@ -80,11 +87,11 @@ target("bootimage")
 
         local boot = target:dep("boot")
         if not os.exists(path.join(efidir, "BOOTX64.EFI")) then
-            os.ln(boot:targetfile(), path.join(efidir, "BOOTX64.EFI"))
+            os.ln(path.relative(boot:targetfile(), efidir), path.join(efidir, "BOOTX64.EFI"))
         end
         local xtos = target:dep("xtos")
         if not os.exists(path.join(outdir, "xtos.exe")) then
-            os.ln(xtos:targetfile(), path.join(outdir, "xtos.exe"))
+            os.ln(path.relative(xtos:targetfile(), outdir), path.join(outdir, "xtos.exe"))
         end
     end)
 
