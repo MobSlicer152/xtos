@@ -10,7 +10,7 @@ EFI_STATUS EfiMain(IN VOID* imageHandle, IN EFI_SYSTEM_TABLE* systemTable)
     BS = ST->BootServices;
     RT = ST->RuntimeServices;
 
-    ST->ConOut->ClearScreen(ST->ConOut);
+    THISCALL(ST->ConOut, ClearScreen);
     Print(L"Image handle: 0x%016X\nSystem table: 0x%016X\n", imageHandle, ST);
     Print(L"%ls firmware v%d.%d, UEFI v%d.%d\n", ST->FirmwareVendor,
         ST->FirmwareRevision >> 16, ST->FirmwareRevision & 0xFFFF,
@@ -19,15 +19,30 @@ EFI_STATUS EfiMain(IN VOID* imageHandle, IN EFI_SYSTEM_TABLE* systemTable)
     // Disable the watchdog
     BS->SetWatchdogTimer(0, 0, 0, NULL);
 
-    Print(L"Getting loaded image information\n");
     EFI_LOADED_IMAGE_PROTOCOL* loadedImage = NULL;
     status = GetProtocol(&LoadedImageProtocol, imageHandle, FALSE, &loadedImage);
     if (EFI_ERROR(status))
     {
-        return status;
+        goto Done;
     }
 
-    //Print(L"Getting boot volume handle\n");
+    EFI_SIMPLE_FILE_SYSTEM_PROTOCOL* bootVolume;
+    status = GetProtocol(&FileSystemProtocol, loadedImage->DeviceHandle,
+        FALSE, &bootVolume);
+    if (EFI_ERROR(status))
+    {
+        goto Done;
+    }
 
-    return EFI_SUCCESS;
+    Print(L"Opening boot volume");
+    EFI_FILE* root;
+    status = THISCALL(bootVolume, OpenVolume, &root);
+    if (EFI_ERROR(status))
+    {
+        goto Done;
+    }
+
+    status = EFI_SUCCESS;
+Done:
+    return status;
 }
