@@ -69,6 +69,8 @@ toolchain("xtfsclang")
         toolchain:add("asflags", march)
     end)
 
+includes("include")
+
 includes("efi")
 includes("boot")
 

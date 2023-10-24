@@ -1,8 +1,9 @@
 target("boot")
     set_kind("binary")
+    add_headerfiles("*.h")
     add_files("*.c")
     add_includedirs("../include", "../efi")
-    add_deps("gnuefi")
+    add_deps("efi")
 
     if is_arch("x64") then
         add_includedirs("../efi/x86_64")

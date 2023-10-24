@@ -1,7 +1,7 @@
 #include "boot.h"
 
 EFI_STATUS GetProtocol(IN EFI_GUID* protocolGuid, IN EFI_HANDLE handle,
-    IN BOOLEAN locate, OUT EFI_HANDLE* protocol)
+    IN BOOLEAN locate, OUT PVOID protocol)
 {
     EFI_STATUS status = EFI_SUCCESS;
     
@@ -21,7 +21,7 @@ EFI_STATUS GetProtocol(IN EFI_GUID* protocolGuid, IN EFI_HANDLE handle,
         goto Done;
     }
 
-    Print(L"Found protocol at 0x%016X\n", *protocol);
+    Print(L"Found protocol at 0x%016X\n", *(EFI_HANDLE*)protocol);
 
 Done:
     return status;

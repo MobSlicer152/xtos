@@ -2,6 +2,12 @@
 
 #include <stdint.h>
 
+#include "intellisense.h"
+
+#define IN
+#define OUT
+#define OPTIONAL
+
 typedef int8_t INT8;
 typedef int16_t INT16;
 typedef int32_t INT32;
@@ -43,7 +49,9 @@ typedef CHAR* PCHAR;
 typedef UCHAR* PUCHAR;
 typedef WCHAR* PWCHAR;
 typedef SIZE_T* PSIZE_T;
-typedef 
+typedef SSIZE_T* PSSIZE_T;
+typedef INT_PTR* PINT_PTR;
+typedef UINT_PTR* PUINT_PTR;
 
 typedef VOID* CONST PCVOID;
 typedef INT8* CONST PCINT8;
@@ -60,4 +68,8 @@ typedef BYTE* CONST PCBYTE;
 typedef CHAR* CONST PCCHAR;
 typedef UCHAR* CONST PCUCHAR;
 typedef WCHAR* CONST PCWCHAR;
+typedef SIZE_T* CONST PCSIZE_T;
+typedef SSIZE_T* CONST PCSSIZE_T;
+typedef INT_PTR* CONST PCINT_PTR;
+typedef UINT_PTR* CONST PCUINT_PTR;
 
