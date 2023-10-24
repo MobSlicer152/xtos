@@ -46,7 +46,7 @@ EFI_STATUS EfiMain(IN VOID* imageHandle, IN EFI_SYSTEM_TABLE* systemTable)
         goto Done;
     }
 
-    Print(L"Loading kernel from %ls\n", g_kernelPath);
+    Print(L"Loading kernel %ls\n", g_kernelPath);
     EFI_FILE* kernel = NULL;
     status = THISCALL(root, Open, &kernel, g_kernelPath, EFI_FILE_MODE_READ,
                       EFI_FILE_READ_ONLY);
@@ -101,7 +101,7 @@ EFI_STATUS EfiMain(IN VOID* imageHandle, IN EFI_SYSTEM_TABLE* systemTable)
     THISCALL(kernel, SetPosition, ntHeaders.OptionalHeader.SizeOfHeaders);
     for (SIZE_T i = 0; i < ntHeaders.FileHeader.NumberOfSections; i++)
     {
-        Print(L"Loading section %ls\n", sections[i].Name);
+        Print(L"Loading section %a\n", sections[i].Name);
     }
 
     status = EFI_SUCCESS;
