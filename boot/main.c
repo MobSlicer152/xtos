@@ -13,7 +13,7 @@ EFI_STATUS EfiMain(IN VOID* imageHandle, IN EFI_SYSTEM_TABLE* systemTable)
     RT = ST->RuntimeServices;
 
     THISCALL(ST->ConOut, ClearScreen);
-    Print(L"Image handle: 0x%016X\nSystem table: 0x%016X\n", imageHandle, ST);
+    Print(L"Image handle: 0x%X\nSystem table: 0x%X\n", imageHandle, ST);
     Print(L"%ls firmware v%d.%d, UEFI v%d.%d\n", ST->FirmwareVendor,
           ST->FirmwareRevision >> 16, ST->FirmwareRevision & 0xFFFF,
           ST->Hdr.Revision >> 16, ST->Hdr.Revision & 0xFFFF);
@@ -88,7 +88,8 @@ EFI_STATUS EfiMain(IN VOID* imageHandle, IN EFI_SYSTEM_TABLE* systemTable)
         goto Done;
     }
 
-    Print(L"Loading sections\n");
+    Print(L"Loading sections relative to base address 0x%X\n",
+          ntHeaders.OptionalHeader.ImageBase);
     THISCALL(kernel, GetPosition, &size);
     THISCALL(kernel, SetPosition,
              size + ntHeaders.OptionalHeader.NumberOfRvaAndSizes *
@@ -101,7 +102,11 @@ EFI_STATUS EfiMain(IN VOID* imageHandle, IN EFI_SYSTEM_TABLE* systemTable)
     THISCALL(kernel, SetPosition, ntHeaders.OptionalHeader.SizeOfHeaders);
     for (SIZE_T i = 0; i < ntHeaders.FileHeader.NumberOfSections; i++)
     {
-        Print(L"Loading section %a\n", sections[i].Name);
+        Print(L"Loading %u-byte section %a from offset 0x%08X at %u-byte "
+              L"region 0x%X\n",
+              sections[i].SizeOfRawData, sections[i].Name,
+              sections[i].PointerToRawData,
+              ntHeaders.OptionalHeader.ImageBase + sections[i].VirtualAddress);
     }
 
     status = EFI_SUCCESS;

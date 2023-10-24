@@ -5,7 +5,7 @@ EFI_STATUS GetProtocol(IN EFI_GUID* protocolGuid, IN EFI_HANDLE handle,
 {
     EFI_STATUS status = EFI_SUCCESS;
 
-    Print(L"Getting protocol %g using handle 0x%016X\n", protocolGuid, handle);
+    Print(L"Getting protocol %g using handle 0x%X\n", protocolGuid, handle);
 
     if (locate)
     {
@@ -21,7 +21,7 @@ EFI_STATUS GetProtocol(IN EFI_GUID* protocolGuid, IN EFI_HANDLE handle,
         goto Done;
     }
 
-    Print(L"Found protocol at 0x%016X\n", *(EFI_HANDLE*)protocol);
+    Print(L"Found protocol at 0x%X\n", *(EFI_HANDLE*)protocol);
 
 Done:
     return status;
