@@ -123,6 +123,18 @@ typedef struct _IMAGE_FILE_HEADER {
 #define IMAGE_FILE_MACHINE_LOONGARCH64       0x6264  // LoongArch 64-bit
 #define IMAGE_FILE_MACHINE_E2K               0xE7D0  // MCST Elbrus 2000
 
+#ifdef __amd64__
+#define IMAGE_FILE_MACHINE_HOST IMAGE_FILE_MACHINE_X64
+#elifdef __riscv64
+#define IMAGE_FILE_MACHINE_HOST IMAGE_FILE_MACHINE_RISCV64
+#elifdef __loongarch64__
+#define IMAGE_FILE_MACHINE_HOST IMAGE_FILE_MACHINE_LOONGARCH64
+#elifdef __aarch64__
+#define IMAGE_FILE_MACHINE_HOST IMAGE_FILE_MACHINE_AARCH64
+#else
+#define IMAGE_FILE_MACHINE_HOST IMAGE_FILE_MACHINE_UNKNOWN
+#endif
+
 //
 // Directory format.
 //

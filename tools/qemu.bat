@@ -1,11 +1,10 @@
-#!/usr/bin/env sh
+@echo off
 
-if [ $# -gt 0 ]; then
-    dir=$1
-else
-    dir=$(dirname $0)
-fi
+set dir=%1
+if "%dir%" == "" (
+    set dir=%~dp0
+)
 
-echo Running in $dir
+echo Running in %dir%
 
-qemu-system-x86_64 -drive file=fat:rw:$dir,format=raw,media=disk -drive if=pflash,format=raw,file="/usr/share/edk2/x64/OVMF.fd"
+qemu-system-x86_64 -drive file=fat:rw:%dir%,format=raw,media=disk -drive if=pflash,format=raw,file="%PROGRAMFILES%\qemu\share\edk2-x86_64-code.fd"

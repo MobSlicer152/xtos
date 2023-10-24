@@ -15,23 +15,23 @@ EFI_STATUS EfiMain(IN VOID* imageHandle, IN EFI_SYSTEM_TABLE* systemTable)
     THISCALL(ST->ConOut, ClearScreen);
     Print(L"Image handle: 0x%016X\nSystem table: 0x%016X\n", imageHandle, ST);
     Print(L"%ls firmware v%d.%d, UEFI v%d.%d\n", ST->FirmwareVendor,
-        ST->FirmwareRevision >> 16, ST->FirmwareRevision & 0xFFFF,
-        ST->Hdr.Revision >> 16, ST->Hdr.Revision & 0xFFFF);
+          ST->FirmwareRevision >> 16, ST->FirmwareRevision & 0xFFFF,
+          ST->Hdr.Revision >> 16, ST->Hdr.Revision & 0xFFFF);
 
     // Disable the watchdog
     BS->SetWatchdogTimer(0, 0, 0, NULL);
 
     EFI_LOADED_IMAGE_PROTOCOL* loadedImage = NULL;
-    status = GetProtocol(&LoadedImageProtocol, imageHandle, FALSE,
-        &loadedImage);
+    status =
+        GetProtocol(&LoadedImageProtocol, imageHandle, FALSE, &loadedImage);
     if (EFI_ERROR(status))
     {
         goto Done;
     }
 
     EFI_SIMPLE_FILE_SYSTEM_PROTOCOL* bootVolume = NULL;
-    status = GetProtocol(&FileSystemProtocol, loadedImage->DeviceHandle,
-        FALSE, &bootVolume);
+    status = GetProtocol(&FileSystemProtocol, loadedImage->DeviceHandle, FALSE,
+                         &bootVolume);
     if (EFI_ERROR(status))
     {
         goto Done;
@@ -48,8 +48,8 @@ EFI_STATUS EfiMain(IN VOID* imageHandle, IN EFI_SYSTEM_TABLE* systemTable)
 
     Print(L"Loading kernel from %ls\n", g_kernelPath);
     EFI_FILE* kernel = NULL;
-    status = THISCALL(root, Open, &kernel, g_kernelPath,
-        EFI_FILE_MODE_READ, EFI_FILE_READ_ONLY);
+    status = THISCALL(root, Open, &kernel, g_kernelPath, EFI_FILE_MODE_READ,
+                      EFI_FILE_READ_ONLY);
     if (EFI_ERROR(status))
     {
         Print(L"Failed to open %ls: %r\n", g_kernelPath, status);
@@ -62,8 +62,8 @@ EFI_STATUS EfiMain(IN VOID* imageHandle, IN EFI_SYSTEM_TABLE* systemTable)
     THISCALL(kernel, Read, &size, &dosHeader);
     if (dosHeader.e_magic != IMAGE_DOS_SIGNATURE)
     {
-        Print(L"DOS signature is 0x%04X, should be 0x%04X\n",
-            dosHeader.e_magic, IMAGE_DOS_SIGNATURE);
+        Print(L"DOS signature is 0x%04X, should be 0x%04X\n", dosHeader.e_magic,
+              IMAGE_DOS_SIGNATURE);
         status = EFI_LOAD_ERROR;
         goto Done;
     }
@@ -71,19 +71,43 @@ EFI_STATUS EfiMain(IN VOID* imageHandle, IN EFI_SYSTEM_TABLE* systemTable)
     Print(L"Reading NT headers at 0x%08X\n", dosHeader.e_lfanew);
     THISCALL(kernel, SetPosition, dosHeader.e_lfanew);
     IMAGE_NT_HEADERS ntHeaders = {};
-    size = sizeof(IMAGE_NT_HEADERS) - IMAGE_NUMBEROF_DIRECTORY_ENTRIES *
-        sizeof(IMAGE_DATA_DIRECTORY);
+    size = sizeof(IMAGE_NT_HEADERS) -
+           IMAGE_NUMBEROF_DIRECTORY_ENTRIES * sizeof(IMAGE_DATA_DIRECTORY);
     THISCALL(kernel, Read, &size, &ntHeaders);
-    if (ntHeaders.Signature != IMAGE_NT_SIGNATURE)
+    if (ntHeaders.Signature != IMAGE_NT_SIGNATURE ||
+        ntHeaders.FileHeader.Machine != IMAGE_FILE_MACHINE_HOST ||
+        ntHeaders.OptionalHeader.Magic != IMAGE_NT_OPTIONAL_HDR64_MAGIC)
     {
-        Print(L"NT signature is 0x%04X, should be 0x%04X\n",
-                ntHeaders.Signature, IMAGE_NT_SIGNATURE);
+        Print(L"NT signature is 0x%04X, should be 0x%04X. Architecture is "
+              L"0x%04X, should be 0x%04X. Optional header magic should be "
+              L"0x%04X, should be 0x%04X\n",
+              ntHeaders.Signature, IMAGE_NT_SIGNATURE,
+              ntHeaders.FileHeader.Machine, IMAGE_FILE_MACHINE_HOST,
+              ntHeaders.OptionalHeader.Magic, IMAGE_NT_OPTIONAL_HDR64_MAGIC);
         status = EFI_LOAD_ERROR;
         goto Done;
     }
 
+    Print(L"Loading sections\n");
+    THISCALL(kernel, GetPosition, &size);
+    THISCALL(kernel, SetPosition,
+             size + ntHeaders.OptionalHeader.NumberOfRvaAndSizes *
+                        sizeof(IMAGE_DATA_DIRECTORY));
+    size = ntHeaders.FileHeader.NumberOfSections * sizeof(IMAGE_SECTION_HEADER);
+    IMAGE_SECTION_HEADER* sections = NULL;
+    BS->AllocatePool(EfiLoaderData, size, &sections);
+    THISCALL(kernel, Read, &size, sections);
+
+    THISCALL(kernel, SetPosition, ntHeaders.OptionalHeader.SizeOfHeaders);
+    for (SIZE_T i = 0; i < ntHeaders.FileHeader.NumberOfSections; i++)
+    {
+        Print(L"Loading section %ls\n", sections[i].Name);
+    }
+
     status = EFI_SUCCESS;
 Done:
-    while (1) {}
+    while (1)
+    {
+    }
     return status;
 }

@@ -87,13 +87,28 @@ target("bootimage")
         local efidir = path.join(outdir, "/EFI/BOOT")
         os.mkdir(efidir)
 
+        function get_bootloader_name()
+            if is_arch("x64") then
+                return "BOOTX64.EFI"
+            elseif is_arch("riscv64") then
+                return "BOOTRISCV64.EFI"
+            elseif is_arch("loongarch64") then
+                return "BOOTLOONGARCH64.EFI"
+            elseif is_arch("aarch64", "arm64") then
+                return "BOOTAARCH64.EFI"
+            end
+
+            return nil
+        end
+
         local boot = target:dep("boot")
-        if not os.exists(path.join(efidir, "BOOTX64.EFI")) then
-            os.ln(path.relative(boot:targetfile(), efidir), path.join(efidir, "BOOTX64.EFI"))
+        local bootloader = get_bootloader_name()
+        if not os.exists(path.join(efidir, bootloader)) then
+            os.ln(path.relative(efidir, path.absolute(boot:targetfile())), path.join(efidir, bootloader))
         end
         local xtos = target:dep("xtos")
         if not os.exists(path.join(outdir, "xtos.exe")) then
-            os.ln(path.relative(xtos:targetfile(), outdir), path.join(outdir, "xtos.exe"))
+            os.ln(path.relative(outdir, path.absolute(xtos:targetfile())), path.join(outdir, "xtos.exe"))
         end
     end)
 
