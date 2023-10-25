@@ -1,4 +1,6 @@
 #include "boot.h"
+#include "efidef.h"
+#include "pe.h"
 
 int _fltused;
 
@@ -48,8 +50,8 @@ EFI_STATUS EfiMain(IN VOID* imageHandle, IN EFI_SYSTEM_TABLE* systemTable)
 
     Print(L"Loading kernel %ls\n", g_kernelPath);
     EFI_FILE* kernel = NULL;
-    status = THISCALL(root, Open, &kernel, g_kernelPath, EFI_FILE_MODE_READ,
-                      EFI_FILE_READ_ONLY);
+    status = THISCALL(root, Open, &kernel, (PWCHAR)g_kernelPath,
+                      EFI_FILE_MODE_READ, EFI_FILE_READ_ONLY);
     if (EFI_ERROR(status))
     {
         Print(L"Failed to open %ls: %r\n", g_kernelPath, status);
@@ -57,7 +59,7 @@ EFI_STATUS EfiMain(IN VOID* imageHandle, IN EFI_SYSTEM_TABLE* systemTable)
     }
 
     Print(L"Reading DOS header\n");
-    size_t size = sizeof(IMAGE_DOS_HEADER);
+    SIZE_T size = sizeof(IMAGE_DOS_HEADER);
     IMAGE_DOS_HEADER dosHeader = {};
     THISCALL(kernel, Read, &size, &dosHeader);
     if (dosHeader.e_magic != IMAGE_DOS_SIGNATURE)
@@ -88,7 +90,7 @@ EFI_STATUS EfiMain(IN VOID* imageHandle, IN EFI_SYSTEM_TABLE* systemTable)
         goto Done;
     }
 
-    Print(L"Loading sections relative to base address 0x%X\n",
+    Print(L"Loading sections relative to base address 0x%16X\n",
           ntHeaders.OptionalHeader.ImageBase);
     THISCALL(kernel, GetPosition, &size);
     THISCALL(kernel, SetPosition,
@@ -96,17 +98,33 @@ EFI_STATUS EfiMain(IN VOID* imageHandle, IN EFI_SYSTEM_TABLE* systemTable)
                         sizeof(IMAGE_DATA_DIRECTORY));
     size = ntHeaders.FileHeader.NumberOfSections * sizeof(IMAGE_SECTION_HEADER);
     IMAGE_SECTION_HEADER* sections = NULL;
-    BS->AllocatePool(EfiLoaderData, size, &sections);
+    BS->AllocatePool(EfiLoaderData, size, (PVOID*)&sections);
     THISCALL(kernel, Read, &size, sections);
 
     THISCALL(kernel, SetPosition, ntHeaders.OptionalHeader.SizeOfHeaders);
     for (SIZE_T i = 0; i < ntHeaders.FileHeader.NumberOfSections; i++)
     {
-        Print(L"Loading %u-byte section %a from offset 0x%08X at %u-byte "
-              L"region 0x%X\n",
+        size = sections[i].SizeOfRawData;
+        PBYTE sectionData = (PBYTE)(ntHeaders.OptionalHeader.ImageBase +
+                                    sections[i].VirtualAddress);
+
+        Print(L"Loading %u-byte section %a from offset 0x%08X to %u-page "
+              L"region 0x%X-0x%X\n",
               sections[i].SizeOfRawData, sections[i].Name,
-              sections[i].PointerToRawData,
-              ntHeaders.OptionalHeader.ImageBase + sections[i].VirtualAddress);
+              sections[i].PointerToRawData, EFI_SIZE_TO_PAGES(size),
+              sectionData, sectionData + EFI_SIZE_TO_PAGES(size) * EFI_PAGE_SIZE);
+
+        status = BS->AllocatePages(
+            AllocateAddress,
+            sections[i].Characteristics & IMAGE_SCN_CNT_CODE ? EfiLoaderCode
+                                                             : EfiLoaderData,
+            EFI_SIZE_TO_PAGES(size), (PUINT_PTR)&sectionData);
+        if (EFI_ERROR(status))
+        {
+            Print(L"Failed to allocate %u pages(s) at 0x%X: %r\n",
+                  EFI_SIZE_TO_PAGES(size), sectionData, status);
+            goto Done;
+        }
     }
 
     status = EFI_SUCCESS;

@@ -1,0 +1,176 @@
+[
+{
+  "directory": "d:\\xtos",
+  "arguments": ["clang.exe", "-c", "-Qunused-arguments", "-target", "x86_64-unknown-windows", "-g", "-O0", "-Iefi", "-D__MINGW32__", "-D_XT", "-o", "build\\.objs\\efi\\windows\\x64\\debug\\efi\\x86_64\\efi_stub.S.obj", "efi\\x86_64\\efi_stub.S"],
+  "file": "efi\\x86_64\\efi_stub.S"
+},
+{
+  "directory": "d:\\xtos",
+  "arguments": ["clang.exe", "-c", "-Qunused-arguments", "-target", "x86_64-unknown-windows", "-g", "-O0", "-Iefi", "-D__MINGW32__", "-D_XT", "-o", "build\\.objs\\efi\\windows\\x64\\debug\\efi\\x86_64\\setjmp.S.obj", "efi\\x86_64\\setjmp.S"],
+  "file": "efi\\x86_64\\setjmp.S"
+},
+{
+  "directory": "d:\\xtos",
+  "arguments": ["clang.exe", "-c", "-std=gnu2x", "-Qunused-arguments", "-target", "x86_64-unknown-windows", "-ffreestanding", "-fno-stack-protector", "-fshort-wchar", "-mno-red-zone", "-g", "-O0", "-Iefi", "-D__MINGW32__", "-fexceptions", "-fcxx-exceptions", "-D_XT", "-o", "build\\.objs\\efi\\windows\\x64\\debug\\efi\\boxdraw.c.obj", "efi\\boxdraw.c"],
+  "file": "efi\\boxdraw.c"
+},
+{
+  "directory": "d:\\xtos",
+  "arguments": ["clang.exe", "-c", "-std=gnu2x", "-Qunused-arguments", "-target", "x86_64-unknown-windows", "-ffreestanding", "-fno-stack-protector", "-fshort-wchar", "-mno-red-zone", "-g", "-O0", "-Iefi", "-D__MINGW32__", "-fexceptions", "-fcxx-exceptions", "-D_XT", "-o", "build\\.objs\\efi\\windows\\x64\\debug\\efi\\cmdline.c.obj", "efi\\cmdline.c"],
+  "file": "efi\\cmdline.c"
+},
+{
+  "directory": "d:\\xtos",
+  "arguments": ["clang.exe", "-c", "-std=gnu2x", "-Qunused-arguments", "-target", "x86_64-unknown-windows", "-ffreestanding", "-fno-stack-protector", "-fshort-wchar", "-mno-red-zone", "-g", "-O0", "-Iefi", "-D__MINGW32__", "-fexceptions", "-fcxx-exceptions", "-D_XT", "-o", "build\\.objs\\efi\\windows\\x64\\debug\\efi\\console.c.obj", "efi\\console.c"],
+  "file": "efi\\console.c"
+},
+{
+  "directory": "d:\\xtos",
+  "arguments": ["clang.exe", "-c", "-std=gnu2x", "-Qunused-arguments", "-target", "x86_64-unknown-windows", "-ffreestanding", "-fno-stack-protector", "-fshort-wchar", "-mno-red-zone", "-g", "-O0", "-Iefi", "-D__MINGW32__", "-fexceptions", "-fcxx-exceptions", "-D_XT", "-o", "build\\.objs\\efi\\windows\\x64\\debug\\efi\\crc.c.obj", "efi\\crc.c"],
+  "file": "efi\\crc.c"
+},
+{
+  "directory": "d:\\xtos",
+  "arguments": ["clang.exe", "-c", "-std=gnu2x", "-Qunused-arguments", "-target", "x86_64-unknown-windows", "-ffreestanding", "-fno-stack-protector", "-fshort-wchar", "-mno-red-zone", "-g", "-O0", "-Iefi", "-D__MINGW32__", "-fexceptions", "-fcxx-exceptions", "-D_XT", "-o", "build\\.objs\\efi\\windows\\x64\\debug\\efi\\data.c.obj", "efi\\data.c"],
+  "file": "efi\\data.c"
+},
+{
+  "directory": "d:\\xtos",
+  "arguments": ["clang.exe", "-c", "-std=gnu2x", "-Qunused-arguments", "-target", "x86_64-unknown-windows", "-ffreestanding", "-fno-stack-protector", "-fshort-wchar", "-mno-red-zone", "-g", "-O0", "-Iefi", "-D__MINGW32__", "-fexceptions", "-fcxx-exceptions", "-D_XT", "-o", "build\\.objs\\efi\\windows\\x64\\debug\\efi\\debug.c.obj", "efi\\debug.c"],
+  "file": "efi\\debug.c"
+},
+{
+  "directory": "d:\\xtos",
+  "arguments": ["clang.exe", "-c", "-std=gnu2x", "-Qunused-arguments", "-target", "x86_64-unknown-windows", "-ffreestanding", "-fno-stack-protector", "-fshort-wchar", "-mno-red-zone", "-g", "-O0", "-Iefi", "-D__MINGW32__", "-fexceptions", "-fcxx-exceptions", "-D_XT", "-o", "build\\.objs\\efi\\windows\\x64\\debug\\efi\\dpath.c.obj", "efi\\dpath.c"],
+  "file": "efi\\dpath.c"
+},
+{
+  "directory": "d:\\xtos",
+  "arguments": ["clang.exe", "-c", "-std=gnu2x", "-Qunused-arguments", "-target", "x86_64-unknown-windows", "-ffreestanding", "-fno-stack-protector", "-fshort-wchar", "-mno-red-zone", "-g", "-O0", "-Iefi", "-D__MINGW32__", "-fexceptions", "-fcxx-exceptions", "-D_XT", "-o", "build\\.objs\\efi\\windows\\x64\\debug\\efi\\entry.c.obj", "efi\\entry.c"],
+  "file": "efi\\entry.c"
+},
+{
+  "directory": "d:\\xtos",
+  "arguments": ["clang.exe", "-c", "-std=gnu2x", "-Qunused-arguments", "-target", "x86_64-unknown-windows", "-ffreestanding", "-fno-stack-protector", "-fshort-wchar", "-mno-red-zone", "-g", "-O0", "-Iefi", "-D__MINGW32__", "-fexceptions", "-fcxx-exceptions", "-D_XT", "-o", "build\\.objs\\efi\\windows\\x64\\debug\\efi\\error.c.obj", "efi\\error.c"],
+  "file": "efi\\error.c"
+},
+{
+  "directory": "d:\\xtos",
+  "arguments": ["clang.exe", "-c", "-std=gnu2x", "-Qunused-arguments", "-target", "x86_64-unknown-windows", "-ffreestanding", "-fno-stack-protector", "-fshort-wchar", "-mno-red-zone", "-g", "-O0", "-Iefi", "-D__MINGW32__", "-fexceptions", "-fcxx-exceptions", "-D_XT", "-o", "build\\.objs\\efi\\windows\\x64\\debug\\efi\\event.c.obj", "efi\\event.c"],
+  "file": "efi\\event.c"
+},
+{
+  "directory": "d:\\xtos",
+  "arguments": ["clang.exe", "-c", "-std=gnu2x", "-Qunused-arguments", "-target", "x86_64-unknown-windows", "-ffreestanding", "-fno-stack-protector", "-fshort-wchar", "-mno-red-zone", "-g", "-O0", "-Iefi", "-D__MINGW32__", "-fexceptions", "-fcxx-exceptions", "-D_XT", "-o", "build\\.objs\\efi\\windows\\x64\\debug\\efi\\exit.c.obj", "efi\\exit.c"],
+  "file": "efi\\exit.c"
+},
+{
+  "directory": "d:\\xtos",
+  "arguments": ["clang.exe", "-c", "-std=gnu2x", "-Qunused-arguments", "-target", "x86_64-unknown-windows", "-ffreestanding", "-fno-stack-protector", "-fshort-wchar", "-mno-red-zone", "-g", "-O0", "-Iefi", "-D__MINGW32__", "-fexceptions", "-fcxx-exceptions", "-D_XT", "-o", "build\\.objs\\efi\\windows\\x64\\debug\\efi\\guid.c.obj", "efi\\guid.c"],
+  "file": "efi\\guid.c"
+},
+{
+  "directory": "d:\\xtos",
+  "arguments": ["clang.exe", "-c", "-std=gnu2x", "-Qunused-arguments", "-target", "x86_64-unknown-windows", "-ffreestanding", "-fno-stack-protector", "-fshort-wchar", "-mno-red-zone", "-g", "-O0", "-Iefi", "-D__MINGW32__", "-fexceptions", "-fcxx-exceptions", "-D_XT", "-o", "build\\.objs\\efi\\windows\\x64\\debug\\efi\\hand.c.obj", "efi\\hand.c"],
+  "file": "efi\\hand.c"
+},
+{
+  "directory": "d:\\xtos",
+  "arguments": ["clang.exe", "-c", "-std=gnu2x", "-Qunused-arguments", "-target", "x86_64-unknown-windows", "-ffreestanding", "-fno-stack-protector", "-fshort-wchar", "-mno-red-zone", "-g", "-O0", "-Iefi", "-D__MINGW32__", "-fexceptions", "-fcxx-exceptions", "-D_XT", "-o", "build\\.objs\\efi\\windows\\x64\\debug\\efi\\hw.c.obj", "efi\\hw.c"],
+  "file": "efi\\hw.c"
+},
+{
+  "directory": "d:\\xtos",
+  "arguments": ["clang.exe", "-c", "-std=gnu2x", "-Qunused-arguments", "-target", "x86_64-unknown-windows", "-ffreestanding", "-fno-stack-protector", "-fshort-wchar", "-mno-red-zone", "-g", "-O0", "-Iefi", "-D__MINGW32__", "-fexceptions", "-fcxx-exceptions", "-D_XT", "-o", "build\\.objs\\efi\\windows\\x64\\debug\\efi\\init.c.obj", "efi\\init.c"],
+  "file": "efi\\init.c"
+},
+{
+  "directory": "d:\\xtos",
+  "arguments": ["clang.exe", "-c", "-std=gnu2x", "-Qunused-arguments", "-target", "x86_64-unknown-windows", "-ffreestanding", "-fno-stack-protector", "-fshort-wchar", "-mno-red-zone", "-g", "-O0", "-Iefi", "-D__MINGW32__", "-fexceptions", "-fcxx-exceptions", "-D_XT", "-o", "build\\.objs\\efi\\windows\\x64\\debug\\efi\\lock.c.obj", "efi\\lock.c"],
+  "file": "efi\\lock.c"
+},
+{
+  "directory": "d:\\xtos",
+  "arguments": ["clang.exe", "-c", "-std=gnu2x", "-Qunused-arguments", "-target", "x86_64-unknown-windows", "-ffreestanding", "-fno-stack-protector", "-fshort-wchar", "-mno-red-zone", "-g", "-O0", "-Iefi", "-D__MINGW32__", "-fexceptions", "-fcxx-exceptions", "-D_XT", "-o", "build\\.objs\\efi\\windows\\x64\\debug\\efi\\misc.c.obj", "efi\\misc.c"],
+  "file": "efi\\misc.c"
+},
+{
+  "directory": "d:\\xtos",
+  "arguments": ["clang.exe", "-c", "-std=gnu2x", "-Qunused-arguments", "-target", "x86_64-unknown-windows", "-ffreestanding", "-fno-stack-protector", "-fshort-wchar", "-mno-red-zone", "-g", "-O0", "-Iefi", "-D__MINGW32__", "-fexceptions", "-fcxx-exceptions", "-D_XT", "-o", "build\\.objs\\efi\\windows\\x64\\debug\\efi\\pause.c.obj", "efi\\pause.c"],
+  "file": "efi\\pause.c"
+},
+{
+  "directory": "d:\\xtos",
+  "arguments": ["clang.exe", "-c", "-std=gnu2x", "-Qunused-arguments", "-target", "x86_64-unknown-windows", "-ffreestanding", "-fno-stack-protector", "-fshort-wchar", "-mno-red-zone", "-g", "-O0", "-Iefi", "-D__MINGW32__", "-fexceptions", "-fcxx-exceptions", "-D_XT", "-o", "build\\.objs\\efi\\windows\\x64\\debug\\efi\\print.c.obj", "efi\\print.c"],
+  "file": "efi\\print.c"
+},
+{
+  "directory": "d:\\xtos",
+  "arguments": ["clang.exe", "-c", "-std=gnu2x", "-Qunused-arguments", "-target", "x86_64-unknown-windows", "-ffreestanding", "-fno-stack-protector", "-fshort-wchar", "-mno-red-zone", "-g", "-O0", "-Iefi", "-D__MINGW32__", "-fexceptions", "-fcxx-exceptions", "-D_XT", "-o", "build\\.objs\\efi\\windows\\x64\\debug\\efi\\smbios.c.obj", "efi\\smbios.c"],
+  "file": "efi\\smbios.c"
+},
+{
+  "directory": "d:\\xtos",
+  "arguments": ["clang.exe", "-c", "-std=gnu2x", "-Qunused-arguments", "-target", "x86_64-unknown-windows", "-ffreestanding", "-fno-stack-protector", "-fshort-wchar", "-mno-red-zone", "-g", "-O0", "-Iefi", "-D__MINGW32__", "-fexceptions", "-fcxx-exceptions", "-D_XT", "-o", "build\\.objs\\efi\\windows\\x64\\debug\\efi\\sread.c.obj", "efi\\sread.c"],
+  "file": "efi\\sread.c"
+},
+{
+  "directory": "d:\\xtos",
+  "arguments": ["clang.exe", "-c", "-std=gnu2x", "-Qunused-arguments", "-target", "x86_64-unknown-windows", "-ffreestanding", "-fno-stack-protector", "-fshort-wchar", "-mno-red-zone", "-g", "-O0", "-Iefi", "-D__MINGW32__", "-fexceptions", "-fcxx-exceptions", "-D_XT", "-o", "build\\.objs\\efi\\windows\\x64\\debug\\efi\\str.c.obj", "efi\\str.c"],
+  "file": "efi\\str.c"
+},
+{
+  "directory": "d:\\xtos",
+  "arguments": ["clang.exe", "-c", "-std=gnu2x", "-Qunused-arguments", "-target", "x86_64-unknown-windows", "-ffreestanding", "-fno-stack-protector", "-fshort-wchar", "-mno-red-zone", "-g", "-O0", "-Iefi", "-D__MINGW32__", "-fexceptions", "-fcxx-exceptions", "-D_XT", "-o", "build\\.objs\\efi\\windows\\x64\\debug\\efi\\runtime\\efirtlib.c.obj", "efi\\runtime\\efirtlib.c"],
+  "file": "efi\\runtime\\efirtlib.c"
+},
+{
+  "directory": "d:\\xtos",
+  "arguments": ["clang.exe", "-c", "-std=gnu2x", "-Qunused-arguments", "-target", "x86_64-unknown-windows", "-ffreestanding", "-fno-stack-protector", "-fshort-wchar", "-mno-red-zone", "-g", "-O0", "-Iefi", "-D__MINGW32__", "-fexceptions", "-fcxx-exceptions", "-D_XT", "-o", "build\\.objs\\efi\\windows\\x64\\debug\\efi\\runtime\\rtdata.c.obj", "efi\\runtime\\rtdata.c"],
+  "file": "efi\\runtime\\rtdata.c"
+},
+{
+  "directory": "d:\\xtos",
+  "arguments": ["clang.exe", "-c", "-std=gnu2x", "-Qunused-arguments", "-target", "x86_64-unknown-windows", "-ffreestanding", "-fno-stack-protector", "-fshort-wchar", "-mno-red-zone", "-g", "-O0", "-Iefi", "-D__MINGW32__", "-fexceptions", "-fcxx-exceptions", "-D_XT", "-o", "build\\.objs\\efi\\windows\\x64\\debug\\efi\\runtime\\rtlock.c.obj", "efi\\runtime\\rtlock.c"],
+  "file": "efi\\runtime\\rtlock.c"
+},
+{
+  "directory": "d:\\xtos",
+  "arguments": ["clang.exe", "-c", "-std=gnu2x", "-Qunused-arguments", "-target", "x86_64-unknown-windows", "-ffreestanding", "-fno-stack-protector", "-fshort-wchar", "-mno-red-zone", "-g", "-O0", "-Iefi", "-D__MINGW32__", "-fexceptions", "-fcxx-exceptions", "-D_XT", "-o", "build\\.objs\\efi\\windows\\x64\\debug\\efi\\runtime\\rtstr.c.obj", "efi\\runtime\\rtstr.c"],
+  "file": "efi\\runtime\\rtstr.c"
+},
+{
+  "directory": "d:\\xtos",
+  "arguments": ["clang.exe", "-c", "-std=gnu2x", "-Qunused-arguments", "-target", "x86_64-unknown-windows", "-ffreestanding", "-fno-stack-protector", "-fshort-wchar", "-mno-red-zone", "-g", "-O0", "-Iefi", "-D__MINGW32__", "-fexceptions", "-fcxx-exceptions", "-D_XT", "-o", "build\\.objs\\efi\\windows\\x64\\debug\\efi\\runtime\\vm.c.obj", "efi\\runtime\\vm.c"],
+  "file": "efi\\runtime\\vm.c"
+},
+{
+  "directory": "d:\\xtos",
+  "arguments": ["clang.exe", "-c", "-std=gnu2x", "-Qunused-arguments", "-target", "x86_64-unknown-windows", "-ffreestanding", "-fno-stack-protector", "-fshort-wchar", "-mno-red-zone", "-g", "-O0", "-Iefi", "-D__MINGW32__", "-fexceptions", "-fcxx-exceptions", "-D_XT", "-o", "build\\.objs\\efi\\windows\\x64\\debug\\efi\\x86_64\\callwrap.c.obj", "efi\\x86_64\\callwrap.c"],
+  "file": "efi\\x86_64\\callwrap.c"
+},
+{
+  "directory": "d:\\xtos",
+  "arguments": ["clang.exe", "-c", "-std=gnu2x", "-Qunused-arguments", "-target", "x86_64-unknown-windows", "-ffreestanding", "-fno-stack-protector", "-fshort-wchar", "-mno-red-zone", "-g", "-O0", "-Iefi", "-D__MINGW32__", "-fexceptions", "-fcxx-exceptions", "-D_XT", "-o", "build\\.objs\\efi\\windows\\x64\\debug\\efi\\x86_64\\initplat.c.obj", "efi\\x86_64\\initplat.c"],
+  "file": "efi\\x86_64\\initplat.c"
+},
+{
+  "directory": "d:\\xtos",
+  "arguments": ["clang.exe", "-c", "-std=gnu2x", "-Qunused-arguments", "-target", "x86_64-unknown-windows", "-ffreestanding", "-fno-stack-protector", "-fshort-wchar", "-mno-red-zone", "-g", "-O0", "-Iefi", "-D__MINGW32__", "-fexceptions", "-fcxx-exceptions", "-D_XT", "-o", "build\\.objs\\efi\\windows\\x64\\debug\\efi\\x86_64\\math.c.obj", "efi\\x86_64\\math.c"],
+  "file": "efi\\x86_64\\math.c"
+},
+{
+  "directory": "d:\\xtos",
+  "arguments": ["clang.exe", "-c", "-std=gnu2x", "-Qunused-arguments", "-target", "x86_64-unknown-windows", "-ffreestanding", "-fno-stack-protector", "-fshort-wchar", "-mno-red-zone", "-g", "-O0", "-Iinclude", "-Iefi", "-Iefi\\x86_64", "-fexceptions", "-fcxx-exceptions", "-D_XT", "-o", "build\\.objs\\boot\\windows\\x64\\debug\\boot\\main.c.obj", "boot\\main.c"],
+  "file": "boot\\main.c"
+},
+{
+  "directory": "d:\\xtos",
+  "arguments": ["clang.exe", "-c", "-std=gnu2x", "-Qunused-arguments", "-target", "x86_64-unknown-windows", "-ffreestanding", "-fno-stack-protector", "-fshort-wchar", "-mno-red-zone", "-g", "-O0", "-Iinclude", "-Iefi", "-Iefi\\x86_64", "-fexceptions", "-fcxx-exceptions", "-D_XT", "-o", "build\\.objs\\boot\\windows\\x64\\debug\\boot\\util.c.obj", "boot\\util.c"],
+  "file": "boot\\util.c"
+},
+{
+  "directory": "d:\\xtos",
+  "arguments": ["clang.exe", "-c", "-std=gnu2x", "-Qunused-arguments", "-target", "x86_64-unknown-windows", "-ffreestanding", "-fno-stack-protector", "-fshort-wchar", "-mno-red-zone", "-g", "-O0", "-Iinclude", "-fexceptions", "-fcxx-exceptions", "-D_XT", "-o", "build\\.objs\\xtos\\windows\\x64\\debug\\xtos\\main.c.obj", "xtos\\main.c"],
+  "file": "xtos\\main.c"
+}]

@@ -9,3 +9,7 @@ build/
 /.vs
 /vsxmake2022
 
+# VS Code stuff
+/.cache
+/compile_commands.json
+

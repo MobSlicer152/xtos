@@ -82,9 +82,9 @@ target("bootimage")
     add_deps("boot", "xtos")
 
     on_build(function (target)
-        local outdir = path.join(target:targetdir(), "img")
+        local outdir = path.absolute(path.join(target:targetdir(), "img"))
         os.mkdir(outdir)
-        local efidir = path.join(outdir, "/EFI/BOOT")
+        local efidir = path.absolute(path.join(outdir, "/EFI/BOOT"))
         os.mkdir(efidir)
 
         function get_bootloader_name()
@@ -101,14 +101,19 @@ target("bootimage")
             return nil
         end
 
+        local origcd = os.workingdir()
+
         local boot = target:dep("boot")
+        local boot = path.relative(path.absolute(boot:targetfile()), path.absolute(efidir))
+        os.cd(efidir)
         local bootloader = get_bootloader_name()
-        if not os.exists(path.join(efidir, bootloader)) then
-            os.ln(path.relative(efidir, path.absolute(boot:targetfile())), path.join(efidir, bootloader))
-        end
+        os.trycp(boot, path.join(efidir, bootloader))
+
         local xtos = target:dep("xtos")
-        if not os.exists(path.join(outdir, "xtos.exe")) then
-            os.ln(path.relative(outdir, path.absolute(xtos:targetfile())), path.join(outdir, "xtos.exe"))
-        end
+        local xtos = path.relative(path.absolute(xtos:targetfile()), path.absolute(outdir))
+        os.cd(outdir)
+        os.trycp(xtos, path.join(outdir, "xtos.exe"))
+
+        os.cd(origcd)
     end)
 
