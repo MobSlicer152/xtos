@@ -13,3 +13,6 @@ build/
 /.cache
 /compile_commands.json
 
+# Rust stuff
+**/target
+

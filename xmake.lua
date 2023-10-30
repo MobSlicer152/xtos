@@ -82,38 +82,7 @@ target("bootimage")
     add_deps("boot", "xtos")
 
     on_build(function (target)
-        local outdir = path.absolute(path.join(target:targetdir(), "img"))
-        os.mkdir(outdir)
-        local efidir = path.absolute(path.join(outdir, "/EFI/BOOT"))
-        os.mkdir(efidir)
-
-        function get_bootloader_name()
-            if is_arch("x64") then
-                return "BOOTX64.EFI"
-            elseif is_arch("riscv64") then
-                return "BOOTRISCV64.EFI"
-            elseif is_arch("loongarch64") then
-                return "BOOTLOONGARCH64.EFI"
-            elseif is_arch("aarch64", "arm64") then
-                return "BOOTAARCH64.EFI"
-            end
-
-            return nil
-        end
-
-        local origcd = os.workingdir()
-
-        local boot = target:dep("boot")
-        local boot = path.relative(path.absolute(boot:targetfile()), path.absolute(efidir))
-        os.cd(efidir)
-        local bootloader = get_bootloader_name()
-        os.trycp(boot, path.join(efidir, bootloader))
-
-        local xtos = target:dep("xtos")
-        local xtos = path.relative(path.absolute(xtos:targetfile()), path.absolute(outdir))
-        os.cd(outdir)
-        os.trycp(xtos, path.join(outdir, "xtos.exe"))
-
-        os.cd(origcd)
+        local targetdir = target:targetdir()
+        os.exec("cargo run --manifest-path sdktools/mkbootimg/Cargo.toml -- " .. targetdir .. " $(arch)")
     end)
 

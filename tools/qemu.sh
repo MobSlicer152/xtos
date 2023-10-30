@@ -1,11 +1,8 @@
 #!/usr/bin/env sh
 
-if [ $# -gt 0 ]; then
-    dir=$1
-else
-    dir=$(dirname $0)
+if [ $# -lt 1 ]; then
+    echo Need disk image
+    exit
 fi
 
-echo Running in $dir
-
-qemu-system-x86_64 -m 128M -drive file=fat:rw:$dir,format=raw,media=disk -drive if=pflash,format=raw,file="/usr/share/edk2/x64/OVMF.fd"
+qemu-system-x86_64 -m 128M -drive file=$1,format=raw,media=disk -drive if=pflash,format=raw,file="/usr/share/edk2/x64/OVMF.fd"

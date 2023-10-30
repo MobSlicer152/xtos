@@ -6,3 +6,8 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+sdktools = { path = ".." }
+fatfs = "0.3.6"
+gpt = { git = "https://github.com/Quyzi/gpt" }
+fscommon = "0.1.1"
+
