@@ -118,11 +118,14 @@ EFI_STATUS EfiMain(IN VOID* imageHandle, IN EFI_SYSTEM_TABLE* systemTable)
             AllocateAddress,
             sections[i].Characteristics & IMAGE_SCN_CNT_CODE ? EfiLoaderCode
                                                              : EfiLoaderData,
-            EFI_SIZE_TO_PAGES(size), (PUINT_PTR)&sectionData);
+            EFI_SIZE_TO_PAGES(size), &sectionData);
         if (EFI_ERROR(status))
         {
             Print(L"Failed to allocate %u pages(s) at 0x%X: %r\n",
                   EFI_SIZE_TO_PAGES(size), sectionData, status);
+	    if (status == EFI_NOT_FOUND) {
+                Print(L"This could mean you don't have enough memory\n");
+            }
             goto Done;
         }
     }

@@ -6,4 +6,4 @@ target("xtos")
 
     add_ldflags("-Wl,/entry:KernelMain", {force = true})
     add_ldflags("-Wl,/subsystem:native", {force = true})
-    add_ldflags("-Wl,/base:0x140000000", {force = true})
+    add_ldflags("-Wl,/base:0x14000000", {force = true})

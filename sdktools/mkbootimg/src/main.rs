@@ -2,7 +2,7 @@ use sdktools::architecture::Architecture;
 use fatfs;
 use fscommon;
 use gpt::{self, disk, GptConfig};
-use std::{env, fs, io::Write, path::PathBuf};
+use std::{env, fs, io::Write, path::{self, PathBuf}};
 
 fn main() {
     let mut args = env::args();
@@ -13,7 +13,7 @@ fn main() {
 
     println!("Making boot image {} for {arch}", image.display());
 
-    const TOTAL_SIZE: usize = 64 * 1024 * 1024;
+    const TOTAL_SIZE: usize = 16 * 1024 * 1024;
     const BLOCK_SIZE: disk::LogicalBlockSize = disk::LogicalBlockSize::Lb512;
     fs::write(&image, &[0_u8; TOTAL_SIZE]).unwrap();
  
@@ -28,7 +28,7 @@ fn main() {
         .create(&image)
         .unwrap();
 
-    gdisk.add_partition("ESP", 63 * 1024 * 1024, gpt::partition_types::EFI, 0, None).unwrap();
+    gdisk.add_partition("ESP", 15 * 1024 * 1024, gpt::partition_types::EFI, 0, None).unwrap();
 
     gdisk.write_inplace().unwrap();
 
@@ -64,8 +64,8 @@ fn main() {
         let mut dirs = PathBuf::new();
         for dir in dir.iter() {
             dirs.push(dir);
-            let dir = dirs.to_str().unwrap();
-            root.create_dir(dir).unwrap();
+            let dir = dirs.to_str().unwrap().replace(path::MAIN_SEPARATOR, "/");
+            root.create_dir(dir.as_str()).unwrap();
         }
 
         let content = fs::read(source).unwrap();

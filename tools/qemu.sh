@@ -5,4 +5,4 @@ if [ $# -lt 1 ]; then
     exit
 fi
 
-qemu-system-x86_64 -m 128M -drive file=$1,format=raw,media=disk -drive if=pflash,format=raw,file="/usr/share/edk2/x64/OVMF.fd"
+qemu-system-x86_64 -m 2G -drive file=$1,format=raw,media=disk -drive if=pflash,format=raw,file="/usr/share/edk2/x64/OVMF.fd"
