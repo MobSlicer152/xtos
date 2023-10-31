@@ -1,9 +1,11 @@
 #pragma once
 
 #include "efi.h"
+#include "efidef.h"
 #include "efilib.h"
 
 #include "basetsd.h"
+#include "boot.h"
 #include "intellisense.h"
 #include "pe.h"
 

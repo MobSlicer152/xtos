@@ -1,6 +1,4 @@
-#include "boot.h"
-#include "efidef.h"
-#include "pe.h"
+#include "bootp.h"
 
 int _fltused;
 
@@ -15,7 +13,7 @@ EFI_STATUS EfiMain(IN VOID* imageHandle, IN EFI_SYSTEM_TABLE* systemTable)
     RT = ST->RuntimeServices;
 
     THISCALL(ST->ConOut, ClearScreen);
-    Print(L"Image handle: 0x%X\nSystem table: 0x%X\n", imageHandle, ST);
+    Print(L"Image handle: 0x%lX\nSystem table: 0x%lX\n", imageHandle, ST);
     Print(L"%ls firmware v%d.%d, UEFI v%d.%d\n", ST->FirmwareVendor,
           ST->FirmwareRevision >> 16, ST->FirmwareRevision & 0xFFFF,
           ST->Hdr.Revision >> 16, ST->Hdr.Revision & 0xFFFF);
@@ -104,31 +102,92 @@ EFI_STATUS EfiMain(IN VOID* imageHandle, IN EFI_SYSTEM_TABLE* systemTable)
     THISCALL(kernel, SetPosition, ntHeaders.OptionalHeader.SizeOfHeaders);
     for (SIZE_T i = 0; i < ntHeaders.FileHeader.NumberOfSections; i++)
     {
-        size = sections[i].SizeOfRawData;
+        size = sections[i].Misc.VirtualSize;
         PBYTE sectionData = (PBYTE)(ntHeaders.OptionalHeader.ImageBase +
                                     sections[i].VirtualAddress);
 
         Print(L"Loading %u-byte section %a from offset 0x%08X to %u-page "
-              L"region 0x%X-0x%X\n",
+              L"region 0x%lX-0x%lX\n",
               sections[i].SizeOfRawData, sections[i].Name,
               sections[i].PointerToRawData, EFI_SIZE_TO_PAGES(size),
-              sectionData, sectionData + EFI_SIZE_TO_PAGES(size) * EFI_PAGE_SIZE);
+              sectionData,
+              sectionData + EFI_SIZE_TO_PAGES(size) * EFI_PAGE_SIZE);
 
         status = BS->AllocatePages(
             AllocateAddress,
             sections[i].Characteristics & IMAGE_SCN_CNT_CODE ? EfiLoaderCode
                                                              : EfiLoaderData,
-            EFI_SIZE_TO_PAGES(size), &sectionData);
+            EFI_SIZE_TO_PAGES(size), (PUINT_PTR)&sectionData);
         if (EFI_ERROR(status))
         {
-            Print(L"Failed to allocate %u pages(s) at 0x%X: %r\n",
+            Print(L"Failed to allocate %u pages(s) at 0x%lX: %r\n",
                   EFI_SIZE_TO_PAGES(size), sectionData, status);
-	    if (status == EFI_NOT_FOUND) {
+            if (status == EFI_NOT_FOUND)
+            {
                 Print(L"This could mean you don't have enough memory\n");
             }
             goto Done;
         }
+
+        size = sections[i].SizeOfRawData;
+        status = THISCALL(kernel, Read, &size, sectionData);
+        if (EFI_ERROR(status))
+        {
+            Print(L"Failed to read %u bytes to 0x%lX: %r\n", size, sectionData,
+                  status);
+            goto Done;
+        }
     }
+
+    KERNEL_BOOT_DATA kernelData = {};
+    PVOID stack = NULL;
+
+    size = KERNEL_BOOT_STACK_SIZE;
+    Print(L"Allocating 0x%lX-page stack for kernel\n", EFI_SIZE_TO_PAGES(size));
+    status = BS->AllocatePages(AllocateAnyPages, EfiLoaderData,
+                               EFI_SIZE_TO_PAGES(size), (PUINT_PTR)&stack);
+    if (EFI_ERROR(status))
+    {
+        Print(L"Failed to allocate 0x%lX-page boot stack: %r\n",
+              EFI_SIZE_TO_PAGES(size), status);
+        goto Done;
+    }
+
+    Print(L"Getting framebuffer\n");
+    EFI_GRAPHICS_OUTPUT_PROTOCOL* gop = NULL;
+    status = GetProtocol(&GraphicsOutputProtocol, NULL, true, &gop);
+    if (EFI_ERROR(status))
+    {
+        goto Done;
+    }
+
+    EFI_GRAPHICS_OUTPUT_MODE_INFORMATION* gopInfo = NULL;
+    SIZE_T gopInfoSize = 0;
+    status = THISCALL(gop, QueryMode, gop->Mode ? gop->Mode->Mode : 0,
+                      &gopInfoSize, &gopInfo);
+    if (status == EFI_NOT_STARTED)
+    {
+        status = THISCALL(gop, SetMode, 0);
+    }
+    if (EFI_ERROR(status))
+    {
+        Print(L"Failed to get video mode: %r\n", status);
+        goto Done;
+    }
+
+    SIZE_T nativeVideoMode = gop->Mode->Mode;
+    Print(L"Setting video to mode %d\n", nativeVideoMode);
+    status = THISCALL(gop, SetMode, nativeVideoMode);
+    if (EFI_ERROR(status))
+    {
+        Print(L"Failed to set video to mode %d: %r\n", nativeVideoMode, status);
+        goto Done;
+    }
+
+    Print(L"Got %ld-byte %ux%u framebuffer at 0x%lX with %ld-pixel scanlines\n",
+          gop->Mode->FrameBufferSize, gop->Mode->Info->HorizontalResolution,
+          gop->Mode->Info->VerticalResolution, gop->Mode->FrameBufferBase,
+          gop->Mode->Info->PixelsPerScanLine);
 
     status = EFI_SUCCESS;
 Done:

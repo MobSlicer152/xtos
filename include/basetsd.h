@@ -24,7 +24,7 @@ typedef __uint128_t UINT128;
 typedef UINT8 BYTE;
 typedef signed char CHAR;
 typedef unsigned char UCHAR;
-typedef wchar_t WCHAR;
+typedef UINT16 WCHAR;
 
 typedef size_t SIZE_T;
 typedef intptr_t SSIZE_T;
