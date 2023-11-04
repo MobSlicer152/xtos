@@ -139,7 +139,6 @@ EFI_STATUS EfiMain(IN VOID* imageHandle, IN EFI_SYSTEM_TABLE* systemTable)
         }
     }
 
-    KERNEL_BOOT_DATA kernelData = {};
     PVOID stack = NULL;
 
     size = KERNEL_BOOT_STACK_SIZE;
@@ -189,10 +188,47 @@ EFI_STATUS EfiMain(IN VOID* imageHandle, IN EFI_SYSTEM_TABLE* systemTable)
           gop->Mode->Info->VerticalResolution, gop->Mode->FrameBufferBase,
           gop->Mode->Info->PixelsPerScanLine);
 
-    status = EFI_SUCCESS;
-Done:
-    while (1)
+    PKERNEL_BOOT_DATA bootData =
+        (PKERNEL_BOOT_DATA)(stack + EFI_SIZE_TO_PAGES(size) * EFI_PAGE_SIZE -
+                            sizeof(KERNEL_BOOT_DATA));
+
+    bootData->efiRt = RT;
+
+    Print(L"Getting memory map\n");
+    PUINT32 descriptorVersion = 0;
+    status =
+        BS->GetMemoryMap(&bootData->memoryMapSize, bootData->memoryMap,
+                         &bootData->memoryMapEntrySize, &descriptorVersion);
+    if (EFI_ERROR(status))
     {
+        Print(L"Failed to get memory map information: %r\n");
+        goto Done;
     }
+    bootData->memoryMapSize +=
+        2 * bootData->memoryMapEntrySize; // 1 for the additional allocation, 1
+                                          // to terminate it or something
+    status = BS->AllocatePool(EfiLoaderData, bootData->memoryMapSize,
+                              (PVOID*)&bootData->memoryMap);
+    if (EFI_ERROR(status))
+    {
+        Print(L"Failed to allocate memory for memory map: %r\n");
+        goto Done;
+    }
+    status =
+        BS->GetMemoryMap(&bootData->memoryMapSize, bootData->memoryMap,
+                         &bootData->memoryMapEntrySize, &descriptorVersion);
+    if (EFI_ERROR(status))
+    {
+        Print(L"Failed to get memory map: %r\n");
+        goto Done;
+    }
+
+    bootData->framebuffer = (PBOOT_PIXEL)gop->Mode->FrameBufferBase;
+    bootData->framebufferSize = gop->Mode->FrameBufferSize;
+    bootData->framebufferWidth = gop->Mode->Info->HorizontalResolution;
+    bootData->framebufferHeight = gop->Mode->Info->VerticalResolution;
+    bootData->framebufferScanlineSize = gop->Mode->Info->PixelsPerScanLine;
+
+Done:
     return status;
 }

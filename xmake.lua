@@ -69,6 +69,8 @@ toolchain("xtfsclang")
         toolchain:add("asflags", march)
     end)
 
+add_cxflags("-Wall", "-Wextra")
+
 includes("include")
 
 includes("efi")

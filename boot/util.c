@@ -9,7 +9,7 @@ EFI_STATUS GetProtocol(IN EFI_GUID* protocolGuid, IN EFI_HANDLE handle,
 
     if (locate)
     {
-        status = BS->LocateProtocol(handle, protocolGuid, protocol);
+        status = BS->LocateProtocol(protocolGuid, NULL, protocol);
     }
     else
     {
