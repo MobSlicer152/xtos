@@ -228,6 +228,15 @@ EFI_STATUS EfiMain(IN VOID* imageHandle, IN EFI_SYSTEM_TABLE* systemTable)
     bootData->framebufferWidth = gop->Mode->Info->HorizontalResolution;
     bootData->framebufferHeight = gop->Mode->Info->VerticalResolution;
     bootData->framebufferScanlineSize = gop->Mode->Info->PixelsPerScanLine;
+    switch (gop->Mode->Info->PixelFormat)
+    {
+    PixelBlueGreenRedReserved8BitPerColor:
+        bootData->framebufferFormat = BootFramebufferFormatBgr;
+        break;
+    PixelRedGreenBlueReserved8BitPerColor:
+        bootData->framebufferFormat = BootFramebufferFormatRgb;
+        break;
+    }
 
     PFN_KERNEL_ENTRY kernelEntry =
         (PFN_KERNEL_ENTRY)(ntHeaders.OptionalHeader.ImageBase +
