@@ -37,10 +37,10 @@ toolchain("xtfsclang")
             if is_arch("x64") then
                 return "-target x86_64-unknown-windows"
             elseif is_arch("riscv64") then
-                return "-target riscv64-unknown-windows"
+                return "-target riscv64-unknown-windows-gnu"
             elseif is_arch("loongarch64") then
-                return "-target loongarch64-unknown-windows"
-            elseif is_arch("aarch64", "arm64") then
+                return "-target loongarch64-unknown-windows-gnu"
+            elseif is_arch("aarch64") then
                 return "-target aarch64-unknown-windows"
             end
 
@@ -71,12 +71,7 @@ toolchain("xtfsclang")
 
 add_cxflags("-Wall", "-Wextra")
 
-includes("include")
-
-includes("efi")
-includes("boot")
-
-includes("xtos")
+includes("base")
 
 target("bootimage")
     set_kind("phony")

@@ -191,19 +191,16 @@ EFI_STATUS EfiMain(IN VOID* imageHandle, IN EFI_SYSTEM_TABLE* systemTable)
     PKERNEL_BOOT_DATA bootData =
         (PKERNEL_BOOT_DATA)(stack + EFI_SIZE_TO_PAGES(size) * EFI_PAGE_SIZE -
                             sizeof(KERNEL_BOOT_DATA));
+    SetMem(bootData, sizeof(KERNEL_BOOT_DATA), 0);
 
     bootData->efiRt = RT;
 
     Print(L"Getting memory map\n");
-    PUINT32 descriptorVersion = 0;
+    UINT_PTR mapKey = 0;
+    UINT32 descriptorVersion = 0;
     status =
-        BS->GetMemoryMap(&bootData->memoryMapSize, bootData->memoryMap,
+        BS->GetMemoryMap(&bootData->memoryMapSize, bootData->memoryMap, &mapKey,
                          &bootData->memoryMapEntrySize, &descriptorVersion);
-    if (EFI_ERROR(status))
-    {
-        Print(L"Failed to get memory map information: %r\n");
-        goto Done;
-    }
     bootData->memoryMapSize +=
         2 * bootData->memoryMapEntrySize; // 1 for the additional allocation, 1
                                           // to terminate it or something
@@ -215,19 +212,32 @@ EFI_STATUS EfiMain(IN VOID* imageHandle, IN EFI_SYSTEM_TABLE* systemTable)
         goto Done;
     }
     status =
-        BS->GetMemoryMap(&bootData->memoryMapSize, bootData->memoryMap,
+        BS->GetMemoryMap(&bootData->memoryMapSize, bootData->memoryMap, &mapKey,
                          &bootData->memoryMapEntrySize, &descriptorVersion);
     if (EFI_ERROR(status))
     {
         Print(L"Failed to get memory map: %r\n");
         goto Done;
     }
+    Print(L"Got %lu %lu-byte version %u memory descriptors\n",
+          bootData->memoryMapSize / bootData->memoryMapEntrySize,
+          bootData->memoryMapEntrySize, descriptorVersion);
 
     bootData->framebuffer = (PBOOT_PIXEL)gop->Mode->FrameBufferBase;
     bootData->framebufferSize = gop->Mode->FrameBufferSize;
     bootData->framebufferWidth = gop->Mode->Info->HorizontalResolution;
     bootData->framebufferHeight = gop->Mode->Info->VerticalResolution;
     bootData->framebufferScanlineSize = gop->Mode->Info->PixelsPerScanLine;
+
+    PFN_KERNEL_ENTRY kernelEntry =
+        (PFN_KERNEL_ENTRY)(ntHeaders.OptionalHeader.ImageBase +
+                   ntHeaders.OptionalHeader.AddressOfEntryPoint);
+    Print(L"Exiting boot services and jumping to 0x%lX with stack 0x%lX in 3 seconds\n",
+          kernelEntry, stack);
+    BS->Stall(3000000);
+    BS->ExitBootServices(imageHandle, mapKey);
+
+    EnterKernel(kernelEntry, stack, bootData);
 
 Done:
     return status;

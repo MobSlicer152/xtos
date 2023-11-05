@@ -1,5 +1,6 @@
 #pragma once
 
+#include <stddef.h>
 #include <stdint.h>
 
 #include "intellisense.h"
@@ -26,10 +27,10 @@ typedef signed char CHAR;
 typedef unsigned char UCHAR;
 typedef UINT16 WCHAR;
 
-typedef size_t SIZE_T;
-typedef intptr_t SSIZE_T;
 typedef intptr_t INT_PTR;
 typedef uintptr_t UINT_PTR;
+typedef size_t SIZE_T;
+typedef intptr_t SSIZE_T;
 
 #define CONST const
 
@@ -52,6 +53,7 @@ typedef SIZE_T* PSIZE_T;
 typedef SSIZE_T* PSSIZE_T;
 typedef INT_PTR* PINT_PTR;
 typedef UINT_PTR* PUINT_PTR;
+typedef VOID (*PFN_VOID)();
 
 typedef VOID* CONST PCVOID;
 typedef INT8* CONST PCINT8;
